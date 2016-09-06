@@ -23,7 +23,8 @@ var getClock = function() {
 };
 
 window.onload = function() {
-	var g = getContext(get('canvas'));
+	var canvas = get("canvas");
+	var g = getContext(canvas);
 	var imagedata = null;
 	var fire = null;
 	var fire2 = null;
@@ -31,11 +32,8 @@ window.onload = function() {
 //		g.setLiquidMode(false);
 		var gw = g.cw;
 		var gh = g.ch;
-		if (imagedata == null || imagedata.width != gw || imagedata.height != gh) {
+		if (imagedata == null) {
 			imagedata = g.getImageData(0, 0, gw, gh);
-			fire = null;
-		}
-		if (fire == null) {
 			fire = [];
 			for (var i = 0; i < gw * gh; i++)
 				fire[i] = 0;
@@ -113,8 +111,16 @@ window.onload = function() {
 		g.fillTextCenter(getClock(), gw / 2, gh / 2, gw / 8 * 2 * .8);
 	};
 	g.init();
+	var bkw, bkh;
 	setInterval(function() {
-		g.draw();
+		if (bkw != canvas.clientWidth || bkh != canvas.clientHeight) {
+		   bkw = canvas.clientWidth;
+		   bkh = canvas.clientHeight;
+		   imagedata = null;
+		   g.init();
+	   } else {
+		   g.draw();
+	   }
 	}, 200);
 };
 </script>
