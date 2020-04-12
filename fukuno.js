@@ -195,7 +195,7 @@ var ajax = function(url, callback) {
 	xhr.setRequestHeader("If-Modified-Since", "Thu, 01 Jun 1970 00:00:00 GMT");
 	xhr.send(data);
 };
-var xml2json = function(xml) { // attribute–³‹A–¼‘Od‚È‚Á‚½‚ç”z—ñ‰»
+var xml2json = function(xml) { // attributeï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Oï¿½dï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½zï¿½ï¿½
 	var f = function(xml) {
 		var json = {};
 		var text = [];
@@ -449,10 +449,12 @@ var getContext = function(canvas) {
 		this.closePath();
 		this.fill();
 	};
-	g.fillTextCenter = function(s, x, y, fonth) {
+	g.fillTextCenter = function(s, x, y, fonth, font) {
 		if (!fonth)
 			fonth = 12;
-		g.font = "normal " + fonth + "px sans-serif";
+		if (!font)
+			font = "sans-serif"
+		g.font = "normal " + fonth + "px " + font;
 		var met = this.measureText(s);
 		var sw = met.width;
 		this.fillText(s, x - sw / 2, y + fonth / 2);

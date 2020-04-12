@@ -1,8 +1,8 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>lifegameclock</title>
 <link rel="apple-touch-icon" href="icon.png"/>
-<meta property="og:image" content="lifegameclock.png"/>
+<meta property="og:image" content="lifegameclock2.png"/>
 <script src=fukuno.js></script>
 <script>"use strict";
 
@@ -13,14 +13,15 @@ var getClock = function() {
 			return "0" + n;
 		return n;
 	};
+	return "23:55:00";
 	return fixzero(d.getHours()) + ":" + fixzero(d.getMinutes()) + ":" + fixzero(d.getSeconds());
+};	
 //		d.getFullYear() % 100,
 //		d.getMonth() + 1,
 //		d.getDate(),
 //		d.getMilliseconds()
 
-//	return "23:55:00"
-};
+	
 
 window.onload = function() {
 	var canvas = get("canvas");
@@ -95,8 +96,8 @@ window.onload = function() {
 				var idx = (y * gw + x) * 4;
 				var n = fire[y * gw + x] == 1 ? 0xff : 0;
 				data[idx++] = n;
-				data[idx++] = 0; //n;
-				data[idx++] = 0; //n;
+				data[idx++] = n;
+				data[idx++] = n;
 				data[idx] = 0xff; // a 0:transparent 0xff:visible
 				/*
 				data[idx++] = 0xff; // r
@@ -108,7 +109,9 @@ window.onload = function() {
 		}
 		g.putImageData(imagedata, 0, 0);
 		g.setColor(255, 255, 255, .5);
-		g.fillTextCenter(getClock(), gw / 2, gh / 2, gw / 8 * 2 * .8);
+		g.fillTextCenter(getClock(), gw / 2, gh / 2, gw / 8 * 2 * .7, 'PT Mono');
+		//g.font = "200px 'PT Mono'"
+		//g.fillText(getClock(), gw / 10, gh / 2, gw, gh / 2);
 	};
 	g.init();
 	var bkw, bkh;
@@ -122,6 +125,21 @@ window.onload = function() {
 		   g.draw();
 	   }
 	}, 200);
+
+	fullscreen.onclick = function() {
+		const target = canvas
+		if (target.webkitRequestFullscreen) {
+			target.webkitRequestFullscreen() //Chrome15+, Safari5.1+, Opera15+
+		} else if (target.mozRequestFullScreen) {
+			target.mozRequestFullScreen() //FF10+
+		} else if (target.msRequestFullscreen) {
+			target.msRequestFullscreen() //IE11+
+		} else if (target.requestFullscreen) {
+			target.requestFullscreen() // HTML5 Fullscreen API仕様
+		} else {
+			alert('your browser does not support fullscreen')
+		}
+	}
 };
 </script>
 <style>
@@ -130,9 +148,13 @@ body {
 	text-align: center;
 }
 #canvas {
-	width: 100%;
-	height: 540px;
+	width: 100vw;
+	height: 100vh;
 }
+#fullscreen {
+	margin: .5em;
+}
+@import url('https://fonts.googleapis.com/css2?family=PT+Mono&display=swap');
 a {
 	color: gray !important;
 }
@@ -141,9 +163,10 @@ a {
 <body>
 
 <canvas id="canvas"></canvas>
+<button id="fullscreen">fullscreen</button>
 
 <div id="credit">
-APP: CC BY <a href="http://fukuno.jig.jp/1506">fukuno.jig.jp</a> (<a href=http://fukuno.jig.jp/2012/lifegame.html>base App</a>)
+APP: CC BY <a href='https://fukuno.jig.jp/'>fukuno.jig.jp</a>  (<a href="https://fukuno.jig.jp/2818">R.I.P.</a> / <a href="https://fukuno.jig.jp/1506">first ver.</a> / <a href=https://fukuno.jig.jp/2012/lifegame.html>base App</a>)
 </div>
 
 </body>
