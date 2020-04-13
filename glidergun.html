@@ -1,10 +1,37 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>lifegameclock - puffer train</title>
+<title>lifegameclock - glider gun</title>
 <link rel="apple-touch-icon" href="icon.png"/>
 <meta property="og:image" content="lifegameclock2.png"/>
 <script src=fukuno.js></script>
 <script>"use strict";
+
+// https://ja.wikipedia.org/wiki/%E3%82%B0%E3%83%A9%E3%82%A4%E3%83%80%E3%83%BC%E9%8A%83
+const PATTERN = `
+□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□
+□□□□□□□□□□□□□□□□□□□■■□□□□□□□□□□□□□□□□□□□□□□□□□□
+□□□□□□□□□□□□□□□□□□□□■□□□□□□□■□□□□□□□□□□□□□□□□□□
+□□□□□□□□□□□□□□□□□□□□■□■□□□□□□□□□□□□□□■■□□□□□□□□
+□□□□□□□□□□□□□□□□□□□□□■■□□□□□□□□□□□□■■□□■□□□□□□□
+□□□□□□□□□□□□□□□□□□□□□□□□□■■■□□□□□□□■■□■■□□□□□□□
+□□□□□□□□□□□□□□□□□□□□□□□□□■■□■■□□□□□□□■■■□□□□□□□
+□□□□□□□□□□□□□□□□□□□□□□□□□■□□■■□□□□□□□□□□□□■■□□□
+□□□□□□□□□□□□□□□□□□□□□□□□□□■■□□□□□□□□□□□□□□■□■□□
+□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□■□□□□□□□■□□
+□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□■■□
+□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□
+□■■□□□□□□□□□□□□□□□□□□□□□□□■□□□□□□□□□□□□□□□□□□□□
+□□■□□□□□□□□□□□□□□□□□□□□□■□■□□□□□□□□□□□□□□□□□□□□
+□□■□■□□□□□□□□□□□□□■■■□□□□■■□□□□□□□□□□□□□□□□□□□□
+□□□■■□□□■□□□□□□□□■□□□■□□□□□□□□□□□□□□□□□□□□□□□□□
+□□□□□□□■□■■□□□□□□■□□□□■□□□□□□□□□□□□□□□□□□□□□□□□
+□□□□□□■□□□□■□□□□□□■■□■□□□□□□□□□■□□□□□□□□□□□□□□□
+□□□□□□□■□□□■□□□□□□□□■□□□■■□□□□□□■□□□□□□□□□□□□□□
+□□□□□□□□■■■□□□□□□□□□□□□□■□■□□□■■■□□□□□□□□□□□□□□
+□□□□□□□□□□□□□□□□□□□□□□□□□□■□□□□□□□□□□□□□□□□□□□□
+□□□□□□□□□□□□□□□□□□□□□□□□□□■■□□□□□□□□□□□□□□□□□□□
+□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□
+`
 
 var getClock = function() {
 	var d = new Date();
@@ -41,14 +68,27 @@ window.onload = function() {
 			fire2 = [];
 			for (var i = 0; i < gw * gh; i++)
 				fire2[i] = 0;
-			var fillratio = 16;
-			var fillw = .95;
-			var offx = Math.floor(gw * (1 - fillw) / 2);
-			var offy = Math.floor(gh * (1 - fillw) / 2);
-			for (var i = gw * gh * fillw * fillw / fillratio; i >= 0; i--) {
-				var x = offx + rnd(gw * fillw);
-				var y = offy + rnd(gh * fillw);
-				fire[y * gw + x] = 1;
+			
+			if (!PATTERN) {
+				const fillratio = 16
+				const fillw = .95
+				const offx = Math.floor(gw * (1 - fillw) / 2)
+				const offy = Math.floor(gh * (1 - fillw) / 2)
+				for (let i = gw * gh * fillw * fillw / fillratio; i >= 0; i--) {
+					const x = offx + rnd(gw * fillw)
+					const y = offy + rnd(gh * fillw)
+					fire[y * gw + x] = 1
+				}
+			} else {
+				const ss = PATTERN.split('\n')
+				for (let i = 0; i < ss.length; i++) {
+					const s = ss[i]
+					for (let j = 0; j < s.length; j++) {
+						if (s.charAt(j) == '■') {
+							fire[(i + ((gh - ss.length) >> 1)) * gw + j + ((gw - s.length) >> 1)] = 1
+						}
+					}
+				}
 			}
 		}
 		function get(x, y) {
