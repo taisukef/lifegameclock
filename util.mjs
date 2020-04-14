@@ -402,8 +402,8 @@ var getContext = function(canvas) {
 		var ua = navigator.userAgent;
 		//if (ua.indexOf("iPhone") >= 0 || ua.indexOf("iPad") >= 0 || ua.indexOf("iPod") >= 0)
 		this.ratio = window.devicePixelRatio;
-		this.cw = this.canvas1.clientWidth * this.ratio;
-		this.ch = this.canvas1.clientHeight * this.ratio;
+		this.cw = (this.canvas1.clientWidth * this.ratio) >> 0;
+		this.ch = (this.canvas1.clientHeight * this.ratio) >> 0;
 		this.canvas1.width = this.cw;
 		this.canvas1.height = this.ch;
 		this.canvas1.ratio = this.ratio;

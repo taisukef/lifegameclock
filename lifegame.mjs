@@ -118,7 +118,7 @@ const showLifeGame = function(canvas, opt) {
 		if (fcnt == 20) {
 			const t = new Date().getTime()
 			const dt = t - bkt
-			console.log('fps', 20000 / dt)
+			console.log('fps', 20000 / dt, 'target', fps)
 			fcnt = 0
 			bkt = t
 		}
