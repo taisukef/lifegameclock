@@ -1,0 +1,75 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>lifegameclock - max</title>
+<link rel="apple-touch-icon" href="icon.png"/>
+<meta property="og:image" content="lifegameclock2.png"/>
+<script type='module'>"use strict"
+import lifegameclock from "./lifegame.mjs"
+
+// https://ja.wikipedia.org/wiki/%E3%83%9E%E3%83%83%E3%82%AF%E3%82%B9_(%E3%83%A9%E3%82%A4%E3%83%95%E3%82%B2%E3%83%BC%E3%83%A0)
+const PATTERN = `
+□□□□□□□□□□□□□□□□□□□□□□□□□□□□
+□□□□□□□□□□□□□□□□□□■□□□□□□□□□
+□□□□□□□□□□□□□□□□□■■■□□□□□□□□
+□□□□□□□□□□□□■■■□□□□■■□□□□□□□
+□□□□□□□□□□□■□□■■■□□■□■■□□□□□
+□□□□□□□□□□■□□□■□■□□■□■□□□□□□
+□□□□□□□□□□■□□□□■□■□■□■□■■□□□
+□□□□□□□□□□□□■□□□□■□■□□□■■□□□
+■■■■□□□□□■□■□□□□■□□□■□■■■□□□
+■□□□■■□■□■■■□■■□□□□□□□□□■■□□
+■□□□□□■■□□□□□■□□□□□□□□□□□□□□
+□■□□■■□■□□■□□■□■■□□□□□□□□□□□
+□□□□□□□■□■□■□■□■□■□□□□□■■■■□
+□■□□■■□■□□■□□■□□■■□■□■■□□□■□
+■□□□□□■■□□□■□■□■□□□■■□□□□□■□
+■□□□■■□■□■■□□■□□■□□■□■■□□■□□
+■■■■□□□□□■□■□■□■□■□■□□□□□□□□
+□□□□□□□□□□■■□■□□■□□■□■■□□■□□
+□□□□□□□□□□□□□■□□□□□■■□□□□□■□
+□■■□□□□□□□□□■■□■■■□■□■■□□□■□
+□□■■■□■□□□■□□□□■□■□□□□□■■■■□
+□□■■□□□■□■□□□□■□□□□□□□□□□□□□
+□□■■□■□■□■□■□□□□■□□□□□□□□□□□
+□□□□□■□■□□■□■□□□■□□□□□□□□□□□
+□□□□■■□■□□■■■□□■□□□□□□□□□□□□
+□□□□□□■■□□□□■■■□□□□□□□□□□□□□
+□□□□□□□■■■□□□□□□□□□□□□□□□□□□
+□□□□□□□□■□□□□□□□□□□□□□□□□□□□
+□□□□□□□□□□□□□□□□□□□□□□□□□□□□
+`
+
+window.onload = function() {
+	lifegameclock.showLifeGame(canvas, { fps: 60, pattern: PATTERN, showclock: false })
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=PT+Mono&display=swap" rel="stylesheet">
+<style>
+body {
+	margin: 0px;
+	text-align: center;
+}
+#canvas {
+	width: 100vw;
+	height: 100vh;
+}
+#fullscreen {
+	margin: .5em;
+}
+/* @import url('https://fonts.googleapis.com/css2?family=PT+Mono&display=swap'); */
+a {
+	color: gray !important;
+}
+</style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+<button id="fullscreen">fullscreen</button>
+
+<div id="credit">
+APP: CC BY <a href='https://fukuno.jig.jp/'>fukuno.jig.jp</a>  (<a href="https://fukuno.jig.jp/2818">R.I.P.</a> / <a href="https://fukuno.jig.jp/1506">first ver.</a> / <a href=https://fukuno.jig.jp/2012/lifegame.html>base App</a>)
+</div>
+
+</body>
+</html>
