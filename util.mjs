@@ -1,25 +1,5 @@
-/* fukuno.js CC BY @taisuke */
+/* util.mjs CC BY @taisuke */
 
-'use strict';
-
-String.prototype.startsWith = function(s) {
-	return this.indexOf(s) == 0;
-};
-String.prototype.endsWith = function(s) {
-	if (s.length > this.length)
-		return false;
-	return this.lastIndexOf(s) == this.length - s.length;
-};
-/*
-Array.prototype.remove = function(o) {
-	for (var i = 0; i < this.length; i++) {
-		if (this[i] === o) {
-			this.splice(i, 1);
-			i--;
-		}
-	}
-};
-*/
 var get = function(id) {
 	return document.getElementById(id);
 };
@@ -456,6 +436,16 @@ var getContext = function(canvas) {
 		this.closePath();
 		this.fill();
 	};
+	g.fillTextCenter = function(s, x, y, fonth, font) {
+		if (!fonth)
+			fonth = 12;
+		if (!font)
+			font = "sans-serif"
+		g.font = "normal " + fonth + "px " + font;
+		var met = this.measureText(s);
+		var sw = met.width;
+		this.fillText(s, x - sw / 2, y + fonth / 2);
+	};
 	// draw arrow
 	g.drawArrow = function(x1, y1, x2, y2, arw, arh, fill) {
 		var g = this;
@@ -648,3 +638,5 @@ var getLastDayOfMonth = function(year, month) {
 	}
 	return 30 + (month + Math.floor(month / 8)) % 2;
 };
+
+export default { getContext, rnd }

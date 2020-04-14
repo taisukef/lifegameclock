@@ -1,0 +1,188 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>lifegameclock - puffer train</title>
+<link rel="apple-touch-icon" href="icon.png"/>
+<meta property="og:image" content="lifegameclock2.png"/>
+<script src=fukuno.js xsrc=fukuno.js></script>
+<script>"use strict";
+
+var getClock = function() {
+	var d = new Date();
+	var fixzero = function(n) {
+		if (n < 10)
+			return "0" + n;
+		return n;
+	};
+	//return "23:55:00";
+	return fixzero(d.getHours()) + ":" + fixzero(d.getMinutes()) + ":" + fixzero(d.getSeconds());
+};	
+//		d.getFullYear() % 100,
+//		d.getMonth() + 1,
+//		d.getDate(),
+//		d.getMilliseconds()
+
+	
+
+window.onload = function() {
+	var g = getContext(canvas);
+	var imagedata = null;
+	var fire = null;
+	var fire2 = null;
+	g.draw = function() {
+//		g.setLiquidMode(false);
+		var gw = g.cw;
+		var gh = g.ch;
+		if (imagedata == null) {
+			imagedata = g.getImageData(0, 0, gw, gh);
+			fire = [];
+			for (var i = 0; i < gw * gh; i++)
+				fire[i] = 0;
+			fire2 = [];
+			for (var i = 0; i < gw * gh; i++)
+				fire2[i] = 0;
+			var fillratio = 16;
+			var fillw = .95;
+			var offx = Math.floor(gw * (1 - fillw) / 2);
+			var offy = Math.floor(gh * (1 - fillw) / 2);
+			for (var i = gw * gh * fillw * fillw / fillratio; i >= 0; i--) {
+				var x = offx + rnd(gw * fillw);
+				var y = offy + rnd(gh * fillw);
+				fire[y * gw + x] = 1;
+			}
+		}
+		function get(x, y) {
+			if (x == -1)
+				x = gw - 1;
+			else if (x == gw)
+				x = 0;
+			if (y == -1)
+				y = gh - 1;
+			else if (y == gh)
+				y = 0;
+			return fire[y * gw + x];
+		};
+		for (var i = 0; i < gw * gh; i++)
+			fire2[i] = 0;
+		for (var i = 0; i < gh; i++) {
+			for (var j = 0; j < gw; j++) {
+				var n = 0;
+				n += get(j - 1, i - 1);
+				n += get(j, i - 1);
+				n += get(j + 1, i - 1);
+				n += get(j - 1, i);
+				n += get(j + 1, i);
+				n += get(j - 1, i + 1);
+				n += get(j, i + 1);
+				n += get(j + 1, i + 1);
+				if (n == 3)
+					fire2[i * gw + j] = 1;
+				else if (n == 2 && fire[i * gw + j] == 1)
+					fire2[i * gw + j] = 1;
+				else
+					fire2[i * gw + j] = 0;
+			}
+		}
+		var tmp = fire;
+		fire = fire2;
+		fire2 = tmp;
+
+//		for (var i = 0; i < 10; i++)
+//			fire[(gh - 1) * gw + (Math.random() * gw >> 0)] = Math.random() * 0x100 >> 0;
+
+		var data = imagedata.data;
+		for (var y = 0; y < gh; y++) {
+			for (var x = 0; x < gw; x++) {
+				var idx = (y * gw + x) * 4;
+				var n = fire[y * gw + x] == 1 ? 0xff : 0;
+				data[idx++] = n;
+				data[idx++] = n;
+				data[idx++] = n;
+				data[idx] = 0xff; // a 0:transparent 0xff:visible
+				/*
+				data[idx++] = 0xff; // r
+				data[idx++] = x % 2 == 0 ? 0xff : 0; // g
+				data[idx++] = Math.random() < .2 ? 0xff : 0; // b
+				data[idx] = 0xff; // a 0:transparent 0xff:visible
+				*/
+			}
+		}
+		g.putImageData(imagedata, 0, 0);
+		g.setColor(255, 255, 255, .5);
+		//g.fillTextCenter(getClock(), gw / 2, gh / 2, gw / 8 * 2 * .7, 'PT Mono');
+		//g.font = "200px 'PT Mono'"
+		//g.fillText(getClock(), gw / 10, gh / 2, gw, gh / 2);
+	};
+	g.init();
+	var bkw, bkh;
+	// fps checker
+	let bkt = new Date().getTime()
+	let fcnt = 0
+	const fps = 60
+	const checkFPS = function() {
+		fcnt++
+		if (fcnt == 20) {
+			const t = new Date().getTime()
+			const dt = t - bkt
+			console.log('fps', 20000 / dt)
+			fcnt = 0
+			bkt = t
+		}
+ }
+	setInterval(function() {
+		if (bkw != canvas.clientWidth || bkh != canvas.clientHeight) {
+		   bkw = canvas.clientWidth;
+		   bkh = canvas.clientHeight;
+		   imagedata = null;
+		   g.init();
+	   } else {
+		   g.draw();
+		 }
+		 checkFPS()
+	}, 1000 / fps);
+
+	fullscreen.onclick = function() {
+		const target = canvas
+		if (target.webkitRequestFullscreen) {
+			target.webkitRequestFullscreen() //Chrome15+, Safari5.1+, Opera15+
+		} else if (target.mozRequestFullScreen) {
+			target.mozRequestFullScreen() //FF10+
+		} else if (target.msRequestFullscreen) {
+			target.msRequestFullscreen() //IE11+
+		} else if (target.requestFullscreen) {
+			target.requestFullscreen() // HTML5 Fullscreen API仕様
+		} else {
+			alert('your browser does not support fullscreen')
+		}
+	}
+};
+</script>
+<link href="https://fonts.googleapis.com/css2?family=PT+Mono&display=swap" rel="stylesheet">
+<style>
+body {
+	margin: 0px;
+	text-align: center;
+}
+#canvas {
+	width: 100vw;
+	height: 100vh;
+}
+#fullscreen {
+	margin: .5em;
+}
+/* @import url('https://fonts.googleapis.com/css2?family=PT+Mono&display=swap'); */
+a {
+	color: gray !important;
+}
+</style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+<button id="fullscreen">fullscreen</button>
+
+<div id="credit">
+APP: CC BY <a href='https://fukuno.jig.jp/'>fukuno.jig.jp</a>  (<a href="https://fukuno.jig.jp/2818">R.I.P.</a> / <a href="https://fukuno.jig.jp/1506">first ver.</a> / <a href=https://fukuno.jig.jp/2012/lifegame.html>base App</a>)
+</div>
+
+</body>
+</html>
