@@ -1,0 +1,22 @@
+<script src="http://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
+<script>
+const md = function(html) {
+  const div = document.createElement("div")
+  div.innerHTML = marked(html)
+  document.body.appendChild(div)
+}
+</script>
+</head>
+<body>
+<script>md(`
+# lifegameclock
+https://taisukef.github.io/lifegameclock/  
+<img src=https://taisukef.github.io/lifegameclock/lifegameclock2.png style='width:100%'>
+
+[max](max.html)  
+[puffertrain](puffertrain.html)  
+[puffertrain2](puffertrain2.html)  
+[glidergun](glidergun.html)  
+[glidergun2](glidergun2.html)  
+[glidergun3](glidergun3.html)  
+`)</script>
